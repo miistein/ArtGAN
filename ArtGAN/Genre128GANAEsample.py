@@ -1,8 +1,8 @@
 import tensorflow as tf
-from layers import conv2d, linear, nnupsampling, batchnorm, pool
-from activations import lrelu
+from nn.layers import conv2d, linear, nnupsampling, batchnorm, pool
+from nn.activations import lrelu
 import numpy as np
-from utils import drawblock, createfolders
+from utils.utils import drawblock, createfolders
 from scipy.misc import imsave
 import os
 
@@ -20,7 +20,7 @@ tf.set_random_seed(6666)  # use different seed to generate different set of imag
 
 # Graph input
 z = tf.random_uniform([batch_size, zdim], -1, 1)
-iny = tf.constant(np.tile(np.eye(n_classes, dtype=np.float32), [batch_size / n_classes + 1, 1])[:batch_size, :])
+iny = tf.constant(np.tile(np.eye(n_classes, dtype=np.float32), [batch_size // n_classes + 1, 1])[:batch_size, :])
 
 
 # Generator
@@ -32,7 +32,7 @@ def generator(inp_z, inp_y, reuse=False):
         g1 = batchnorm(g1, is_training=tf.constant(True), name=gname + 'bn1g')
         g1 = lrelu(g1, 0.2)
         g1_reshaped = tf.reshape(g1, [-1, 512, sz, sz])
-        print 'genreshape: ' + str(g1_reshaped.get_shape().as_list())
+        print('genreshape: ' + str(g1_reshaped.get_shape().as_list()))
 
         g2 = nnupsampling(g1_reshaped, [8, 8])
         g2 = conv2d(g2, nout=512, kernel=3, name=gname + 'deconv2')

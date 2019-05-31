@@ -128,8 +128,7 @@ def specialchar(s):
 
 
 def createfolders(par, *args):
-    if not os.path.exists(par):
-        os.mkdir(par)
+    os.makedirs(par, exist_ok=True)
     return_list = []
     for arg in args:
         new_dir = par + arg

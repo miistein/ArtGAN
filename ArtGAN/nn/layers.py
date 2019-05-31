@@ -88,8 +88,8 @@ def conv2d(x, nout, kernel=3, std=0.02, use_b=False, strides=1, name='conv2d', p
         W = tf.get_variable('W', [kernel, kernel, x.get_shape()[1], nout],
                             initializer=tf.random_normal_initializer(stddev=std))
         conv = tf.nn.conv2d(x, W, strides=[1, 1, strides, strides], padding=pad, data_format='NCHW')
-        if print_struct:
-            print conv.name + ': ' + str(conv.get_shape().as_list())
+        #if print_struct:
+            #print( conv.name + ': ' + str(conv.get_shape().as_list()))
         if use_b:
             b = tf.get_variable('b', [nout], initializer=tf.constant_initializer(0.0))
             conv = tf.nn.bias_add(conv, b, data_format='NCHW')
@@ -107,7 +107,7 @@ def deconv2d(x, nout, kernel=3, std=0.02, use_b=False, strides=2, name='deconv2d
         if use_b:
             b = tf.get_variable('b', [nout], initializer=tf.constant_initializer(0.0))
             deconv = tf.nn.bias_add(x, b, data_format='NCHW')
-        print deconv.name + ': ' + str(deconv.get_shape().as_list())
+        #print( deconv.name + ': ' + str(deconv.get_shape().as_list()))
         return deconv
 
 
@@ -121,7 +121,7 @@ def pool(x, fsize=2, strides=2, op='max', pad='SAME'):
                                 data_format='NCHW')
     else:
         raise ValueError('op only supports max or avg!')
-    print pooled.name + ': ' + str(pooled.get_shape().as_list())
+    #print(pooled.name + ': ' + str(pooled.get_shape().as_list()))
     return pooled
 
 
@@ -132,7 +132,7 @@ def linear(x, nout, std=0.02, use_b=False, init_b=0.0, name='linear'):
         if use_b:
             b = tf.get_variable('b', [nout], initializer=tf.constant_initializer(init_b))
             lout = tf.nn.bias_add(lout, b)
-        print lout.name + ': ' + str(lout.get_shape().as_list())
+        #print(lout.name + ': ' + str(lout.get_shape().as_list()))
         return lout
 
 
@@ -142,7 +142,7 @@ def flatten(x):
 
 def nnupsampling(inp, size):
     upsample = tf.transpose(tf.image.resize_nearest_neighbor(tf.transpose(inp, [0, 2, 3, 1]), size), [0, 3, 1, 2])
-    print upsample.name + ': ' + str(upsample.get_shape().as_list())
+    #print upsample.name + ': ' + str(upsample.get_shape().as_list())
     return upsample
 
 
@@ -152,7 +152,7 @@ def subpixel(inp, nfm, upscale=2, name='subpixel'):
     output = tf.transpose(output, [0, 2, 3, 1])
     output = tf.depth_to_space(output, upscale)
     output = tf.transpose(output, [0, 3, 1, 2])
-    print name + ': ' + str(output.get_shape().as_list())
+    #print(name + ': ' + str(output.get_shape().as_list()))
     return output
 
 
@@ -201,7 +201,7 @@ def gramatrix(x, scale=0.1):
     shape = x.get_shape().as_list()
     x_reshape = tf.reshape(x, [-1, shape[1], shape[2] * shape[3]])
     x_reshape = tf.matmul(x_reshape, x_reshape, transpose_b=True) * scale
-    print 'gramatrix: ' + str(x_reshape.get_shape().as_list())
+    #print('gramatrix: ' + str(x_reshape.get_shape().as_list()))
     return x_reshape
 
 
@@ -223,5 +223,5 @@ def PS(X, r, scale=2):
     Xc = tf.split(tf.transpose(X, [0, 2, 3, 1]), scale, 3)
     X = tf.concat([_phase_shift(x, r) for x in Xc], 3)
     X = tf.transpose(X, [0, 3, 1, 2])
-    print 'PhaseShift: ' + str(X.get_shape().as_list())
+    #print('PhaseShift: ' + str(X.get_shape().as_list()))
     return X

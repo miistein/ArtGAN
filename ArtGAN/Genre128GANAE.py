@@ -1,21 +1,19 @@
 import tensorflow as tf
-from layers import conv2d, linear, flatten, nnupsampling, batchnorm, gaussnoise, pool
-from activations import lrelu
-from op import log_sum_exp
+from nn.layers import conv2d, linear, nnupsampling, batchnorm, pool
+from nn.activations import lrelu
+from nn.op import log_sum_exp
 from data_loader import train_loader, validation_loader
-from neon.backends import gen_backend
+#from neon.backends import gen_backend
 import numpy as np
-from utils import drawblock, createfolders, OneHot, image_reshape
+from utils.utils import drawblock, createfolders, OneHot, image_reshape
 from scipy.misc import imsave
 import os
-
 
 # Create folders to store images
 gen_dir, real_dir, gen_dir128 = createfolders("./genimgs/Genre128GANAE", "/gen", "/real", "/gen128")
 # Create folder to store models
 dir_name = './models/Genre128GANAE'
-if not os.path.exists(dir_name):
-    os.mkdir(dir_name)
+os.makedirs(dir_name, exist_ok=True)
 
 # Parameters
 init_iter, max_iter = 0, 50000
